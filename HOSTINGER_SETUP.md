@@ -1,10 +1,10 @@
-# 🏠 HOSTINGER POSTGRESQL BEÁLLÍTÁSI ÚTMUTATÓ
+# 🏠 HOSTINGER MYSQL BEÁLLÍTÁSI ÚTMUTATÓ
 
 ## 🎯 **ELŐKÉSZÜLETEK**
 
-✅ **Exportált adatok**: `kaszadella_neon_backup.sql` (202KB)  
+✅ **Exportált adatok**: `kaszadella_mysql_backup.sql` (MySQL format)  
 ✅ **Projekt kész**: Teljes Next.js alkalmazás  
-✅ **Konfiguráció**: Készen áll a frissítésre
+✅ **Konfiguráció**: MySQL-re optimalizálva
 
 ---
 
@@ -14,9 +14,9 @@
 - URL: `https://cpanel.hostinger.com` 
 - Vagy a hosting dashboard-ról
 
-### **2. PostgreSQL adatbázis létrehozása**
+### **2. MySQL adatbázis létrehozása**
 
-#### **🗄️ Databases → PostgreSQL Databases**
+#### **🗄️ Databases → MySQL Databases**
 ```
 1. Database Name: kaszadella_prod
 2. Create Database ✓
@@ -40,25 +40,26 @@
 ```bash
 # Ezeket kell majd használni:
 HOSTINGER_DB_HOST="localhost"  # vagy konkrét server IP
-HOSTINGER_DB_PORT="5432"       # PostgreSQL alapértelmezett
+HOSTINGER_DB_PORT="3306"       # MySQL alapértelmezett
 HOSTINGER_DB_NAME="kaszadella_prod"
 HOSTINGER_DB_USER="kaszadella_user"  
 HOSTINGER_DB_PASS="[Generált jelszó]"
 
 # Teljes CONNECTION STRING:
-"postgresql://kaszadella_user:[PASSWORD]@localhost:5432/kaszadella_prod"
+"mysql://kaszadella_user:[PASSWORD]@localhost:3306/kaszadella_prod"
 ```
 
 ---
 
 ## 📥 **ADATOK IMPORTÁLÁSA**
 
-### **Opció 1: cPanel File Manager**
+### **Opció 1: cPanel File Manager + phpMyAdmin**
 ```
 1. File Manager megnyitása
-2. kaszadella_neon_backup.sql feltöltése
-3. Terminal megnyitása (ha van)
-4. psql parancs futtatása
+2. kaszadella_mysql_backup.sql feltöltése
+3. cPanel → phpMyAdmin
+4. kaszadella_prod adatbázis kiválasztása
+5. Import → SQL fájl feltöltése
 ```
 
 ### **Opció 2: SSH (ha elérhető)**
@@ -67,14 +68,15 @@ HOSTINGER_DB_PASS="[Generált jelszó]"
 ssh username@your-domain.com
 
 # Import parancs
-psql -U kaszadella_user -d kaszadella_prod < kaszadella_neon_backup.sql
+mysql -u kaszadella_user -p kaszadella_prod < kaszadella_mysql_backup.sql
 ```
 
-### **Opció 3: phpPgAdmin (ha telepített)**
+### **Opció 3: phpMyAdmin (ajánlott)**
 ```
-1. cPanel → phpPgAdmin
-2. Import funkció
-3. SQL fájl feltöltése
+1. cPanel → phpMyAdmin
+2. kaszadella_prod adatbázis kiválasztása
+3. Import funkció
+4. SQL fájl feltöltése
 ```
 
 ---
@@ -86,7 +88,7 @@ psql -U kaszadella_user -d kaszadella_prod < kaszadella_neon_backup.sql
 #### **Hozz létre új `.env.hostinger` fájlt:**
 ```env
 # HOSTINGER PRODUCTION DATABASE
-DATABASE_URL="postgresql://kaszadella_user:[PASSWORD]@localhost:5432/kaszadella_prod"
+DATABASE_URL="mysql://kaszadella_user:[PASSWORD]@localhost:3306/kaszadella_prod"
 
 # NEXTAUTH
 AUTH_SECRET="[ÚJ ERŐS SECRET]"
@@ -107,10 +109,10 @@ SMTP_PASSWORD="[EMAIL PASSWORD]"
 
 ### **2. Adatbázis kapcsolat tesztelése**
 
-#### **Docker-rel teszt:**
+#### **MySQL parancssorral:**
 ```bash
 # Kapcsolat tesztelése (helyettesítsd a valós adatokkal)
-docker run --rm postgres:17 psql "postgresql://kaszadella_user:[PASSWORD]@YOUR_HOSTINGER_IP:5432/kaszadella_prod" -c "\\dt"
+mysql -h localhost -u kaszadella_user -p kaszadella_prod -e "SHOW TABLES;"
 ```
 
 ---
@@ -200,7 +202,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ## ✅ **ELLENŐRZÉSI LISTA**
 
 ### **🗄️ Adatbázis**
-- [ ] PostgreSQL adatbázis létrehozva
+- [ ] MySQL adatbázis létrehozva
 - [ ] Felhasználó és jogosultságok beállítva  
 - [ ] Backup sikeresen importálva
 - [ ] Kapcsolat tesztelve
@@ -233,7 +235,7 @@ RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 ```bash
 # Ellenőrizd a kapcsolati adatokat
 # Host: localhost vagy server IP
-# Port: 5432 (alapértelmezett)
+# Port: 3306 (MySQL alapértelmezett)
 # SSL: lehet hogy disable kell
 ```
 
@@ -261,4 +263,4 @@ chmod 644 *.js *.json
 5. **✅ DNS**: Domain átállítása
 6. **✅ Monitoring**: Teljesítmény figyelés
 
-**🏁 EREDMÉNY: 100% saját kontroll Hostinger szerveren!** 
+**🏁 EREDMÉNY: 100% saját kontroll Hostinger szerveren MySQL-lel!** 

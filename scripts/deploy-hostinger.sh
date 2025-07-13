@@ -87,7 +87,7 @@ cp drizzle.config.ts deployment/hostinger/
 cp hostinger.env.template deployment/hostinger/
 
 # Backup fájl
-cp kaszadella_neon_backup.sql deployment/hostinger/
+cp kaszadella_mysql_backup.sql deployment/hostinger/
 
 # 📋 Deployment útmutató másolása
 cp HOSTINGER_SETUP.md deployment/hostinger/
@@ -106,8 +106,8 @@ echo "📁 Mappa: deployment/hostinger/"
 echo ""
 echo "🎯 KÖVETKEZŐ LÉPÉSEK:"
 echo "1. 📤 Töltsd fel a ZIP fájlt Hostinger cPanel File Manager-be"
-echo "2. 🗄️ Állítsd be a PostgreSQL adatbázist"
-echo "3. 📥 Importáld a kaszadella_neon_backup.sql fájlt"
+echo "2. 🗄️ Állítsd be a MySQL adatbázist"
+echo "3. 📥 Importáld a kaszadella_mysql_backup.sql fájlt"
 echo "4. 🔧 Állítsd be Environment Variables-t hostinger.env.template alapján"
 echo "5. 🚀 Indítsd el a Node.js alkalmazást"
 echo ""
