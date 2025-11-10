@@ -1,0 +1,103 @@
+"use client";
+
+import { useState } from "react";
+
+export default function AdminDepositsPage() {
+  // Dummy adatok — meetingre tökéletes
+  const [deposits, setDeposits] = useState([
+    {
+      id: 1,
+      name: "Kovács Péter",
+      userId: 12,
+      amount: 20000,
+      reference: "CASA-12-20251109-AB12CD",
+      date: "2025-11-09 15:22",
+      status: "pending",
+    },
+    {
+      id: 2,
+      name: "Nagy Anna",
+      userId: 44,
+      amount: 15000,
+      reference: "CASA-44-20251108-FE98AA",
+      date: "2025-11-08 18:10",
+      status: "pending",
+    },
+  ]);
+
+  function approve(id: number) {
+    setDeposits((prev) =>
+      prev.map((d) =>
+        d.id === id ? { ...d, status: "approved" } : d
+      )
+    );
+  }
+
+  return (
+    <div className="mx-auto max-w-5xl p-6">
+      <h1 className="text-2xl font-semibold mb-6">
+        Admin – Beérkezett Utalások
+      </h1>
+
+      <table className="w-full border-collapse">
+        <thead>
+          <tr className="border-b bg-gray-100">
+            <th className="p-3 text-left">Felhasználó</th>
+            <th className="p-3 text-left">Összeg</th>
+            <th className="p-3 text-left">Közlemény</th>
+            <th className="p-3 text-left">Dátum</th>
+            <th className="p-3 text-left">Állapot</th>
+            <th className="p-3 text-left">Művelet</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {deposits.map((d) => (
+            <tr key={d.id} className="border-b">
+              <td className="p-3">
+                {d.name} (#{d.userId})
+              </td>
+
+              <td className="p-3">
+                {d.amount.toLocaleString("hu-HU")} Ft
+              </td>
+
+              <td className="p-3 font-mono text-sm">
+                {d.reference}
+              </td>
+
+              <td className="p-3 text-sm text-gray-700">{d.date}</td>
+
+              <td className="p-3">
+                {d.status === "pending" ? (
+                  <span className="text-yellow-600 font-medium">
+                    Függőben
+                  </span>
+                ) : (
+                  <span className="text-green-700 font-medium">
+                    Jóváírva
+                  </span>
+                )}
+              </td>
+
+              <td className="p-3">
+                {d.status === "pending" && (
+                  <button
+                    onClick={() => approve(d.id)}
+                    className="px-3 py-1 rounded-xl bg-black text-white"
+                  >
+                    Jóváírás
+                  </button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <div className="mt-10 text-sm text-gray-500">
+        * Meetingen látható demó: a valódi backend később lesz bekötve.
+      </div>
+    </div>
+  );
+}

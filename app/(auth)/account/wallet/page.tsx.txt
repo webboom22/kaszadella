@@ -1,0 +1,109 @@
+"use client";
+
+import { useState } from "react";
+
+export default function WalletPage() {
+  const [balance] = useState(32500); // DEMÓ – látszódjon a meetingen
+  const [logs] = useState([
+    { id: 1, type: "deposit", amount: 15000, at: "2025.11.08 17:10" },
+    { id: 2, type: "bet", amount: -5000, at: "2025.11.08 18:22" },
+  ]);
+
+  return (
+    <div className="mx-auto max-w-3xl p-6">
+      <h1 className="text-2xl font-semibold mb-4">Pénztárca</h1>
+
+      {/* Kártyák */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="rounded-2xl shadow p-4">
+          <div className="text-sm text-gray-500">Aktuális egyenleg</div>
+          <div className="text-3xl font-bold">
+            {balance.toLocaleString("hu-HU")} Ft
+          </div>
+        </div>
+
+        <div className="rounded-2xl shadow p-4">
+          <div className="text-sm text-gray-500">Utolsó feltöltés</div>
+          <div className="text-xl">15 000 Ft</div>
+        </div>
+
+        <div className="rounded-2xl shadow p-4">
+          <div className="text-sm text-gray-500">Státusz</div>
+          <div className="inline-block rounded-full bg-yellow-100 text-yellow-800 px-3 py-1 text-sm">
+            Kézi jóváírás aktív
+          </div>
+        </div>
+      </div>
+
+      {/* Gombok */}
+      <div className="flex gap-3 mb-8">
+        <a
+          href="/auth/account/deposit"
+          className="rounded-2xl shadow px-5 py-3 bg-black text-white"
+        >
+          Egyenleg feltöltése
+        </a>
+        <button className="rounded-2xl border px-5 py-3 text-gray-700">
+          Kifizetés (hamarosan)
+        </button>
+      </div>
+
+      {/* Tranzakciók */}
+      <h2 className="text-xl font-semibold mb-2">Tranzakciók</h2>
+
+      <div className="rounded-2xl border overflow-hidden">
+        <table className="w-full text-sm">
+          <thead className="bg-gray-50">
+            <tr>
+              <th className="text-left p-3">Dátum</th>
+              <th className="text-left p-3">Típus</th>
+              <th className="text-right p-3">Összeg</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {logs.map((row) => (
+              <tr key={row.id} className="border-t">
+                <td className="p-3">{row.at}</td>
+                <td className="p-3">
+                  {row.type === "deposit" ? "Feltöltés" : "Fogadás"}
+                </td>
+                <td
+                  className={`p-3 text-right ${
+                    row.amount > 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {row.amount > 0 ? "+" : ""}
+                  {row.amount.toLocaleString("hu-HU")} Ft
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+export default function WalletPage() {
+  return (
+    <div className="mx-auto max-w-3xl p-6">
+      <div className="rounded-2xl border overflow-hidden">
+        {/* ... a régi tartalom ... */}
+      </div>
+
+      {/* Itt jelenjen meg a chat iframe */}
+      <iframe
+  src="https://chocolate-dotterel-780897.hostingersite.com/kaszadella-chat/"
+  style={{
+    width: "100%",
+    height: "700px",
+    border: "none",
+    marginTop: "40px"
+  }}
+/>
+
+
+    </div>
+  );
+}
+

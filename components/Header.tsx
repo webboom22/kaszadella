@@ -14,16 +14,7 @@ const Header = ({ session }: { session?: Session | null }) => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const navLinks = [
-    { name: "Kezdőlap", href: "/" },
-    { name: "Tippek", href: "/tips" },
-    { name: "Előfizetés", href: "/subscription" },
-    { name: "Útmutató", href: "/tutorial" },
-    { name: "Belépés", href: "/sign-up" },
-  ];
-
   const leftLinks = [{ name: "Kezdőlap", href: "/" }];
-  const centerBrandLink = [{ name: "Kaszadella", href: "/" }];
   const rightLinks = [
     { name: "Tippek", href: "/tips" },
     { name: "Előfizetés", href: "/subscription" },
@@ -31,14 +22,13 @@ const Header = ({ session }: { session?: Session | null }) => {
     { name: "Belépés", href: "/sign-up" },
   ];
 
-  // Ha a felhasználó be van jelentkezve, a "Belépés" helyett megjelenítjük az avatar ikont
   const renderLink = (name: string, href: string, extraProps = {}) => {
     if (name === "Belépés" && session && session.user) {
       return (
         <Link
           href="/my-profile"
           {...extraProps}
-          className=" rounded p-1 text-black align-middle flex flex-col items-center gap-3 mt-2"
+          className="rounded p-1 text-black align-middle flex flex-col items-center gap-3 mt-2"
         >
           <Avatar>
             <AvatarFallback>
@@ -49,6 +39,7 @@ const Header = ({ session }: { session?: Session | null }) => {
         </Link>
       );
     }
+
     return (
       <Link href={href} {...extraProps}>
         {name}
@@ -56,13 +47,11 @@ const Header = ({ session }: { session?: Session | null }) => {
     );
   };
 
-  // Variánsok a bal és jobb ikonok animációjához:
-
   return (
     <header className="relative z-[9999] md:z-[0]">
-      {/* Felső sor: logó, brand, desktop navigáció, mobil hamburger */}
       <div className="flex items-center justify-between px-6 py-3 shadow-lg bg-gradient-to-r from-black/50 to-black/100">
-        {/* Bal oldal: logó és "Kaszadella" felirat */}
+
+        {/* Bal oldal */}
         <div className="flex-1 text-left hidden md:flex">
           {leftLinks.map((link) => (
             <Link
@@ -77,27 +66,24 @@ const Header = ({ session }: { session?: Session | null }) => {
             </Link>
           ))}
         </div>
-        {/*Középső rész_ Brand középre igazítva */}
+
+        {/* Közép brand */}
         <div className="flex-1 text-center">
           <Link href="/">
             <div className="flex items-center justify-center gap-3">
-              <div className="flex">
-                <Image
-                  src="/images/kasza.png"
-                  alt="Kaszadella kasza"
-                  width={50}
-                  height={50}
-                />
+
+              <Image
+                src="/images/kasza.png"
+                alt="Kaszadella kasza"
+                width={50}
+                height={50}
+              />
+
+              {/* ✅ Javított brand – NINCS több button */}
+              <div className="z-1 text-3xl font-bold text-white">
+                Kaszadella
               </div>
 
-              {/* Középső brand szöveg – mindig középen */}
-              <div className="z-1">
-                <button className="text-3xl font-bold text-white">
-                  Kaszadella
-                </button>
-              </div>
-
-              {/* Jobb oldali ikon – kezdetben a brand szöveg jobb oldalán */}
               <motion.div className="flex">
                 <Image
                   src="/images/kasza.png"
@@ -110,7 +96,8 @@ const Header = ({ session }: { session?: Session | null }) => {
             </div>
           </Link>
         </div>
-        {/* Desktop navigáció: csak md felett */}
+
+        {/* Jobb desktop linkek */}
         <ul className="hidden md:flex gap-6 flex-1 justify-end">
           {rightLinks.map(({ name, href }) => (
             <li key={href}>
@@ -124,7 +111,7 @@ const Header = ({ session }: { session?: Session | null }) => {
           ))}
         </ul>
 
-        {/* Mobil hamburger ikon: csak kisebb képernyőkön */}
+        {/* Mobil hamburger */}
         <div className="md:hidden">
           <button
             onClick={() => setMenuOpen((prev) => !prev)}
@@ -139,7 +126,7 @@ const Header = ({ session }: { session?: Session | null }) => {
         </div>
       </div>
 
-      {/* Mobil menü: jobb oldalról csúszik be, teljes képernyőt lefedve */}
+      {/* Mobil menü */}
       <AnimatePresence>
         {menuOpen && (
           <motion.nav
@@ -151,7 +138,7 @@ const Header = ({ session }: { session?: Session | null }) => {
             className="fixed top-0 right-0 w-full h-full bg-black/90 backdrop-blur-sm md:hidden"
           >
             <div className="flex flex-col h-full">
-              {/* Bezáró gomb a tetején */}
+
               <div className="flex justify-end p-4">
                 <button
                   onClick={() => setMenuOpen(false)}
@@ -160,8 +147,8 @@ const Header = ({ session }: { session?: Session | null }) => {
                   <XMarkIcon className="h-6 w-6 text-yellow-500" />
                 </button>
               </div>
-              {/* Menü elemek, egymás alatt */}
-              <ul className="flex flex-col justify-center align-middle items-center p-4">
+
+              <ul className="flex flex-col justify-center items-center p-4 gap-6">
                 {[...leftLinks, ...rightLinks].map(({ name, href }) => (
                   <li key={href} onClick={() => setMenuOpen(false)}>
                     {renderLink(name, href, {
@@ -170,6 +157,7 @@ const Header = ({ session }: { session?: Session | null }) => {
                   </li>
                 ))}
               </ul>
+
             </div>
           </motion.nav>
         )}

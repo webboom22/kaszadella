@@ -1,0 +1,121 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
+function makeRef(userId = 12) {
+  const d = new Date();
+  const ymd = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(
+    2,
+    "0"
+  )}${String(d.getDate()).padStart(2, "0")}`;
+  const rand = Math.random().toString(16).slice(2, 8).toUpperCase();
+  return `CASA-${userId}-${ymd}-${rand}`;
+}
+
+export default function DepositPage() {
+  const [amount, setAmount] = useState<number>(10000);
+  const reference = useMemo(() => makeRef(12), []);
+
+  return (
+    <div className="mx-auto max-w-3xl p-6">
+      <h1 className="text-2xl font-semibold mb-2">
+        Egyenleg feltöltése – Banki utalás
+      </h1>
+      <p className="text-gray-600 mb-6">
+        Kézi jóváírással működik: utalsz → beérkezik → admin jóváírja → fogadhatsz.
+      </p>
+
+      {/* Összeg */}
+      <div className="rounded-2xl border p-4 mb-6">
+        <label className="block text-sm text-gray-600 mb-1">Összeg (HUF)</label>
+        <input
+          type="number"
+          className="w-full rounded-xl border px-3 py-2"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          min={1000}
+          step={500}
+        />
+        <div className="flex flex-wrap gap-2 mt-3">
+          {[5000, 10000, 20000, 50000].map((v) => (
+            <button
+              key={v}
+              onClick={() => setAmount(v)}
+              className="rounded-full border px-3 py-1 text-sm"
+            >
+              {v.toLocaleString("hu-HU")} Ft
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Banki adatok */}
+      <div className="rounded-2xl border p-4 mb-6">
+        <h2 className="font-medium mb-3">Banki adatok</h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <div className="text-sm text-gray-500">Kedvezményezett</div>
+            <div className="font-semibold">Casadella Kft.</div>
+          </div>
+
+          <div>
+            <div className="text-sm text-gray-500">Bank</div>
+            <div className="font-semibold">Példa Bank Zrt.</div>
+          </div>
+
+          <div>
+            <div className="text-sm text-gray-500">IBAN</div>
+            <div className="font-semibold">
+              HU12 3456 7890 1234 5678 9012 3456
+            </div>
+          </div>
+
+          <div>
+            <div className="text-sm text-gray-500">BIC (SWIFT)</div>
+            <div className="font-semibold">BANKHUHB</div>
+          </div>
+
+          <div className="md:col-span-2">
+            <div className="text-sm text-gray-500">Közlemény (KÖTELEZŐ)</div>
+            <div className="font-semibold text-indigo-700">{reference}</div>
+            <div className="text-xs text-gray-500 mt-1">
+              A közleményt pontosan így írd be, különben csúszhat a jóváírás.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Lépések */}
+      <ol className="list-decimal pl-5 text-sm text-gray-700 space-y-2 mb-6">
+        <li>Indítsd el az utalást a saját bankodból a fenti adatokkal.</li>
+        <li>
+          Közlemény: <b>{reference}</b>
+        </li>
+        <li>
+          Összeg: <b>{amount.toLocaleString("hu-HU")} Ft</b>
+        </li>
+        <li>Amint beérkezik, kézzel jóváírjuk és e-mailt kapsz.</li>
+      </ol>
+
+      {/* Gombok */}
+      <div className="flex gap-3">
+        <button className="rounded-2xl bg-black text-white px-5 py-3">
+          Kérés elküldése (demó)
+        </button>
+
+        <a
+          href="/auth/account/wallet"
+          className="rounded-2xl border px-5 py-3"
+        >
+          Vissza a Pénztárcához
+        </a>
+      </div>
+
+      <div className="mt-6 text-xs text-gray-500">
+        * Meeting demó: a backend manuális jóváírása a prezentáció után lesz
+        bekötve.
+      </div>
+    </div>
+  );
+}
