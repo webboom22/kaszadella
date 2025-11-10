@@ -50,4 +50,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
     </div>
   );<FloatingIframeChat />
 
+
 }
+export const metadata = {
+  title: "Kaszadella",
+  description: "A legjobb tippek otthona",
+};
