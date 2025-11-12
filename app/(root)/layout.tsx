@@ -1,12 +1,14 @@
+import "./globals.css";
 import Script from "next/script";
-import RootShell from "@/app/RootShell"; // Ezt igazítsuk pontos útvonalra
+import RootShell from "components/ui/RootShell";
+import React from "react";
 
 export const metadata = {
   title: "Kaszadella",
   description: "A legjobb tippek otthona",
 };
 
-export default async function Layout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
